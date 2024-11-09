@@ -1,6 +1,6 @@
 <?php
 
-require_once("lib/include.php");
+require_once("../lib/include.php");
 
 const TELEGRAM_API_URL = "https://api.telegram.org/bot" . TELEGRAM_BOT_TOKEN;
 
