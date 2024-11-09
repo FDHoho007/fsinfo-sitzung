@@ -1,33 +1,32 @@
 <?php
 
-require_once("lib/ldap.php");
+require_once('../lib/include.php');
+requireRole(ROLE_REDELISTE);
 
-if(!isset($_COOKIE["redeliste_token"])) {
-    http_response_code(401);
-    return;
-}
-
-if($_COOKIE["redeliste_token"] != "AxkJDLx8jZABFmQfEF6XR2rdv3KUXhT6") {
-    http_response_code(403);
-    return;
-}
-
-if($_SERVER["REQUEST_METHOD"] == "GET") {
-    $redeliste = trim(file_get_contents("../data/redeliste.txt"));
-    $redeliste = json_decode($redeliste, true);
-    $users = getUsers();
-    foreach($redeliste as $col) {
-        echo("<div>");
-        echo("<h3>" . htmlspecialchars($col["title"]) . "</h3>");
-        foreach(explode("\n", $col["content"]) as $line) {
-            if(str_starts_with($line, "user:")) {
-                echo(htmlspecialchars($users[substr($line, 5)]["displayName"]) . "<br>");
-            } else {
-                echo(htmlspecialchars($line) . "<br>");
-            }
-        }
-        echo("</div>");
+if(isset($_GET["to"])) {
+    triggerBeamerEvent("set-to," . $_GET["to"]);
+} else if(isset($_GET["column"])) {
+    $allowedTags = "<b><i><u><strong><em><br><p><ul><ol><li><div><span><style>";
+    $column = $_GET["column"];
+    $dataFile = "../data/redeliste.json";
+    if(!file_exists($dataFile)) {
+        $empty = [
+            "column0" => ["title" => "", "content" => ""],
+            "column1" => ["title" => "", "content" => ""],
+            "column2" => ["title" => "", "content" => ""]
+        ];
+        file_put_contents($dataFile, json_encode($empty));
     }
-} else if($_SERVER["REQUEST_METHOD"] == "POST") {
-    file_put_contents("../data/redeliste.txt", file_get_contents('php://input'));
+    $data = json_decode(file_get_contents($dataFile), true);
+    if(isset($_POST["title"])) {
+        $data["column$column"]["title"] = strip_tags($_POST["title"], $allowedTags);
+        file_put_contents($dataFile, json_encode($data));
+        triggerBeamerEvent("update-column,$column");
+    } else if(isset($_POST["content"])) {
+        $data["column$column"]["content"] = strip_tags($_POST["content"], $allowedTags);
+        file_put_contents($dataFile, json_encode($data));
+        triggerBeamerEvent("update-column,$column");
+    } else {
+        echo(json_encode($data["column$column"]));
+    }
 }

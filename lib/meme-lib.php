@@ -1,0 +1,36 @@
+<?php
+
+function getCurrentXKCD(): string
+{
+    $xkcdHTML = file_get_contents("https://xkcd.com");
+    preg_match('/\/\/imgs\.xkcd\.com\/[^\s"\'<>]*/', $xkcdHTML, $matches);
+    return "https:" . $matches[0];
+}
+
+function downloadMeme(string $url): void
+{
+    $urlParts = explode(".", $url);
+    $filename = uniqid("meme_", true) . "lib" . end($urlParts);
+    file_put_contents("../meme/$filename", file_get_contents($url));
+    file_put_contents("../data/meme.txt", $filename);
+    triggerBeamerEvent("reload-meme");
+}
+
+function getMemeUrl(): string
+{
+    return "meme/" . file_get_contents("../data/meme.txt");
+}
+
+function getMemeCooldown(): array
+{
+    $cooldown = [];
+    if (file_exists("../data/cooldown.json")) {
+        $cooldown = json_decode(file_get_contents("../data/cooldown.json"), true);
+    }
+    return $cooldown;
+}
+
+function setMemeCooldown(array $cooldown): void
+{
+    file_put_contents("../data/cooldown.json", json_encode($cooldown));
+}

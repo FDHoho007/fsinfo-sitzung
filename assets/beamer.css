@@ -1,0 +1,83 @@
+* {
+    font-family: sans-serif;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body, html {
+    height: 100%;
+}
+
+.frame-container {
+    display: flex;
+    height: 100vh; /* Full viewport height */
+}
+
+.left-frame {
+    width: 50%; /* Left half of the page */
+    height: 100%; /* Full height */
+    border: none;
+}
+
+.right-container {
+    display: flex;
+    flex-direction: column; /* Stack iframes vertically */
+    width: 50%; /* Right half of the page */
+    border-left: 2px solid gray;
+}
+
+.top-right-frame, .bottom-right-frame {
+    height: 50%; /* Each iframe takes half of the right side */
+    border: none; /* No border */
+    overflow: hidden; /* Hide overflow content */
+}
+
+.bottom-right-frame {
+    border-top: 2px solid gray;
+}
+
+#pause {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 75px;
+}
+
+#pause-countdown {
+    font-size: 300px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+#meme-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    overflow: hidden;
+}
+#meme-container img {
+    max-width: 100%;
+    max-height: 85%;
+    object-fit: contain;
+}
+
+.content-area {
+    border: 1px solid #ced4da;
+    padding: 10px;
+    border-radius: 4px;
+    min-height: 80px;
+    background-color: #f8f9fa;
+    white-space: pre-wrap; /* Allows hard wraps at the end of the line */
+    word-wrap: break-word; /* Breaks long words at the end of the line */
+}

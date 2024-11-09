@@ -15,31 +15,33 @@ $monthsGermanToEnglish = [
     'Dezember' => 'December'
 ];
 
-function redmineGet($url, $token) {
+function redmineGet($url): bool|string
+{
     $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_URL, REDMINE_URL . "/$url");
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        "X-Redmine-API-Key: $token"
+        "X-Redmine-API-Key: " . REDMINE_TOKEN
     ]);
     $response = curl_exec($ch);
     curl_close($ch);
     return $response;
 }
 
-function nextSitzung($index) {
+function nextSitzung($index): array|string
+{
     global $monthsGermanToEnglish;
     preg_match_all('/\d{1,2}\. Sitzung am (\d{1,2}\. [A-Za-z]+ \d{4})/', $index, $matches);
     $sitzungen = [];
-    foreach($matches[1] as $key => $date) {
+    foreach ($matches[1] as $key => $date) {
         $date = strtr($date, $monthsGermanToEnglish);
         $date = DateTime::createFromFormat('d. F Y', $date)->getTimestamp();
         $sitzungen[strtotime("midnight", $date)] = $matches[0][$key];
     }
     ksort($sitzungen);
     $now = strtotime("midnight", time());
-    foreach($sitzungen as $time => $sitzung) {
-        if($time >= $now) {
+    foreach ($sitzungen as $time => $sitzung) {
+        if ($time >= $now) {
             $nextSitzung = $sitzung;
             break;
         }
