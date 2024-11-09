@@ -10,7 +10,7 @@ function getCurrentXKCD(): string
 function downloadMeme(string $url): void
 {
     $urlParts = explode(".", $url);
-    $filename = uniqid("meme_", true) . "lib" . end($urlParts);
+    $filename = uniqid("meme_", true) . "." . end($urlParts);
     file_put_contents("../meme/$filename", file_get_contents($url));
     file_put_contents("../data/meme.txt", $filename);
     triggerBeamerEvent("reload-meme");

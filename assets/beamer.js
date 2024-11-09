@@ -6,6 +6,7 @@ function loadMeme() {
             video.autoplay = true;
             video.muted = true;
             video.playsInline = true;
+            video.loop = true;
             let source = document.createElement("source");
             source.type = "video/mp4";
             source.src = memeUrl;
