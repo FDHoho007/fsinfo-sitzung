@@ -42,7 +42,7 @@ new EventSource("api/beamer-events.php").onmessage = function(event) {
     switch(event.data.split(",")[0]) {
         case "reload-to":
             to.location.reload();
-            injectTOTracker();
+            setTimeout(injectTOTracker, 1000);
             break;
         case "set-to":
             to.setCurrentTO(to.findTO(event.data.split(",")[1]));
