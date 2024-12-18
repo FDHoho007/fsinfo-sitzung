@@ -18,7 +18,7 @@ requireRole(ROLE_SITZUNGSLEITUNG);
 <body>
 
 <div class="frame-container">
-    <iframe src="api/beamer-to.php" class="left-frame" style="zoom: 1.3"></iframe>
+    <iframe src="api/beamer-to.php" class="left-frame" style="zoom: 1.6"></iframe>
     <div class="right-container" style="zoom: 1.3;">
         <div class="top-right-frame container">
             <h1 class="text-center mt-4 fw-bold">Redeliste</h1>
