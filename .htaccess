@@ -1,2 +1,0 @@
-RewriteEngine On
-RewriteRule ^redmine(.*)$ https://fsinfo.fim.uni-passau.de/redmine$1 [R=301,L]
