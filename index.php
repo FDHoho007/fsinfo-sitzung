@@ -26,6 +26,7 @@ $role = getRole();
             <?php } if($role >= ROLE_REDELISTE) { ?>
             <a href="redeliste.php" class="btn btn-success btn-lg w-100 mb-3">Redeliste</a>
             <?php } ?>
+            <a href="api/upload.php" class="btn btn-primary btn-lg w-100 mb-3">Meme hochladen</a>
             <a href="logout.php" class="btn btn-danger btn-lg w-100">Abmelden</a>
         </div>
     </div>

@@ -10,8 +10,16 @@ function getCurrentXKCD(): string
 function downloadMeme(string $url): void
 {
     $urlParts = explode(".", $url);
-    $filename = uniqid("meme_", true) . "." . end($urlParts);
+    $filename = uniqid("meme_", true) . "." . pathinfo($url, PATHINFO_EXTENSION);
     file_put_contents("../meme/$filename", file_get_contents($url));
+    file_put_contents("../data/meme.txt", $filename);
+    triggerBeamerEvent("reload-meme");
+}
+
+function uploadMeme(array $file): void
+{
+    $filename = uniqid("meme_", true) . "." . pathinfo($file['name'], PATHINFO_EXTENSION);
+    move_uploaded_file($file['tmp_name'], "../meme/$filename");
     file_put_contents("../data/meme.txt", $filename);
     triggerBeamerEvent("reload-meme");
 }
