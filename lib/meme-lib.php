@@ -31,11 +31,10 @@ function getMemeUrl(): string
 
 function getMemeCooldown(): array
 {
-    $cooldown = [];
     if (file_exists("../data/cooldown.json")) {
-        $cooldown = json_decode(file_get_contents("../data/cooldown.json"), true);
+        return json_decode(file_get_contents("../data/cooldown.json"), true);
     }
-    return $cooldown;
+    return [];
 }
 
 function setMemeCooldown(array $cooldown): void

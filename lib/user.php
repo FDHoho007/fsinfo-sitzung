@@ -2,15 +2,15 @@
 
 function verifyCredentials(string $username, string $password): bool
 {
-    $ldap = ldap_connect("ldap://10.30.10.23:1389");
+    $ldap = ldap_connect("ldap://" . LDAP_SERVER);
     ldap_set_option($ldap, LDAP_OPT_PROTOCOL_VERSION, 3);
     return @ldap_bind($ldap, "uid=$username,ou=users,dc=fsinfo,dc=fim,dc=uni-passau,dc=de", $password);
 }
 
 function getUsername(): ?string
 {
-    if (isset($_COOKIE["authentication"]) && JWT::verify($_COOKIE["authentication"])) {
-        $jwt = JWT::parse($_COOKIE["authentication"])->getPayload();
+    if (isset($_COOKIE["sitzung_authentication"]) && JWT::verify($_COOKIE["sitzung_authentication"])) {
+        $jwt = JWT::parse($_COOKIE["sitzung_authentication"])->getPayload();
         if ($jwt["iss"] == "fsinfo-sitzung" && $jwt["aud"] == "fsinfo-sitzung" &&
             $jwt["exp"] > time() && $jwt["nbf"] <= time()) {
             return $jwt["sub"];
@@ -30,15 +30,20 @@ function setUsername(string $username): void
         "iat" => time()
     ];
     $jwt = new JWT(JWT::DEFAULT_HEADER, $payload);
-    setcookie("authentication", $jwt->sign(), $payload["exp"], "/", "sitzung.fs-info.de", true, true);
+    setcookie("sitzung_authentication", $jwt->sign(), $payload["exp"], "/", DOMAIN, true, true);
 }
 
 function getRole(): ?int
 {
     if (isLoggedIn()) {
-        return USERS[getUsername()]["role"];
+        $username = getUsername();
+        if(array_key_exists($username, USERS)) {
+            return USERS[$username]["role"];
+        } else {
+            return ROLE_USER;
+        }
     }
-    return ROLE_USER;
+    return 0;
 }
 
 function isLoggedIn(): bool

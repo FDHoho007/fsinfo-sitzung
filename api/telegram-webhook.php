@@ -2,6 +2,11 @@
 
 require_once("../lib/include.php");
 
+if (!isset($_SERVER['HTTP_X_TELEGRAM_BOT_API_SECRET_TOKEN']) || $_SERVER['HTTP_X_TELEGRAM_BOT_API_SECRET_TOKEN'] !== TELEGRAM_BOT_SECRET) {
+    http_response_code(403);
+    exit('Forbidden');
+}
+
 const TELEGRAM_API_URL = "https://api.telegram.org/bot" . TELEGRAM_BOT_TOKEN;
 
 $body = json_decode(file_get_contents("php://input"), true);

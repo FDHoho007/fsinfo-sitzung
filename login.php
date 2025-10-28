@@ -25,7 +25,7 @@ if(isset($_POST["username"]) && isset($_POST["password"])) {
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-4">
-            <img src="https://fsinfo.fim.uni-passau.de/images/gruppenfoto_SoSe24.jpg" alt="Logo" class="img-fluid mb-3">
+            <img src="<?= LOGIN_PICTURE ?>" alt="Logo" class="img-fluid mb-3">
             <h3 class="text-center mb-4">Mit FSinfo Kennung anmelden</h3>
             <?php if(isset($success) && !$success) { ?>
                 <div id="errorMessage" class="alert alert-danger">

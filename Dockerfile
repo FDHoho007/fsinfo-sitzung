@@ -1,11 +1,13 @@
 FROM php:8-apache
-RUN a2enmod rewrite proxy proxy_http ssl
+# If this tool is hosted on a different domain than redmine we need this proxy config
+RUN a2enmod proxy proxy_http ssl
+COPY apache.conf /etc/apache2/sites-available/000-default.conf
+
 RUN apt-get update && \
     apt-get install -y libldap2-dev && \
     docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu && \
     docker-php-ext-install ldap && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
-COPY apache.conf /etc/apache2/sites-available/000-default.conf
 COPY data /var/www/html/data
 COPY meme /var/www/html/meme
 COPY api /var/www/html/api
